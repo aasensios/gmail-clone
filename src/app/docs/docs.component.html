@@ -1,0 +1,108 @@
+<mat-toolbar fxLayout fxLayoutAlign="start center" fxLayoutGap="0.5em" style="background-color: transparent;">
+  <button mat-icon-button (click)="drawer.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <div fxLayout fxLayoutGap="0.7em">
+    <img src="favicon.ico">
+    <span routerLink="/">Indexer</span>
+  </div>
+  <mat-form-field appearance="outline" floatLabel="never" class="search-box">
+    <button matPrefix mat-icon-button aria-label="Search icon button">
+      <mat-icon>search</mat-icon>
+    </button>
+    <input #searchbox type="text" matInput placeholder="Filter" (keyup)="applyFilter($event)">
+    <button *ngIf="searchbox.value" mat-button matSuffix mat-icon-button aria-label="Clear search"
+      (click)="clearSearch()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+</mat-toolbar>
+
+<mat-divider></mat-divider>
+
+<mat-drawer-container autosize class="remaining-height">
+  <mat-drawer #drawer mode="side" opened="true" class="fixed-width">
+    <mat-selection-list #labelsList [multiple]="false">
+      <mat-list-option *ngFor="let state of states" [value]="state.name" [matTooltip]="state.name">
+        <mat-icon mat-list-icon>{{state.icon}}</mat-icon>
+        {{ state.name | titlecase}}
+      </mat-list-option>
+    </mat-selection-list>
+  </mat-drawer>
+
+
+  <!-- <smc-simplemattable
+    [data]="data"
+    [columns]="columns"
+    [paginator]="true"
+    [paginatorLength]="paginatorLength"
+    [backendPagination]="true"
+    [loading]="loading"
+    (page)="refresh($event)"
+    [rowClickable]="true"
+    (rowClick)="viewDoc($event)">
+  </smc-simplemattable> -->
+
+
+  <div>
+    <mat-paginator [length]="resultsLength" pageSize="10" hidePageSize></mat-paginator>
+    <div class="example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+      <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+      <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+        GitHub's API rate limit has been reached. It will be reset in one minute.
+      </div>
+    </div>
+    <div class="example-table-container" [ngStyle]="{'opacity': isLoadingResults ? '0.5' : '1'}">
+      <table mat-table [dataSource]="dataSource" class="example-table" matSort matSortActive="created"
+        matSortDisableClear matSortDirection="desc">
+        <ng-container matColumnDef="select" class="select-column">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+              [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()"
+              matTooltip="Select">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+              [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)" matTooltip="Select">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="number">
+          <th mat-header-cell *matHeaderCellDef>Issue #</th>
+          <td mat-cell *matCellDef="let row" class="issue-number-column">{{row.number}}</td>
+        </ng-container>
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>Title</th>
+          <td mat-cell *matCellDef="let row">
+            <div fxLayout fxLayoutAlign="start center" fxLayoutGap="0.4em">
+              <mat-chip-list aria-label="Issue state">
+                <mat-chip disableRipple>{{ row.state }}</mat-chip>
+              </mat-chip-list>
+              <span>{{row.title}}</span>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="created" [stickyEnd]="true">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Created</th>
+          <td mat-cell *matCellDef="let row" class="created-and-action-buttons-column">
+            <div [style.display]="row.hovered ? 'none' : 'block'">{{row.created_at | date}}</div>
+            <div [style.display]="row.hovered ? 'block' : 'none'">
+              <button *ngFor="let action of actions" mat-icon-button [attr.aria-label]="action.name | titlecase"
+                [matTooltip]="action.name | titlecase" class="action-button">
+                <mat-icon>{{action.icon}}</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns;"
+          class="example-element-row remove-background" [ngClass]="{'mat-elevation-z2': row.hovered}"
+          (mouseover)="handleMouseOver(row)" (mouseout)="handleMouseLeave(row)">
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+</mat-drawer-container>

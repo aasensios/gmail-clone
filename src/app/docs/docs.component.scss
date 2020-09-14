@@ -1,0 +1,105 @@
+.full-width-table {
+  width: 100%;
+}
+
+.fixed-width {
+  width: 241px;
+}
+
+.remaining-height {
+  height: calc(100% - 65px);
+}
+
+h1,
+.mat-table:hover {
+  // background: whitesmoke;
+  cursor: pointer;
+}
+
+[mat-row].remove-background {
+  background: none;
+}
+
+/* Structure */
+.example-container {
+  position: relative;
+  min-height: 200px;
+}
+
+.example-table-container {
+  position: relative;
+  // max-height: 400px;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+}
+
+.example-loading-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.example-rate-limit-reached {
+  color: #980000;
+  max-width: 360px;
+  text-align: center;
+}
+
+/* Column Widths */
+// .mat-column-number,
+// .mat-column-state {
+//   max-width: 64px;
+// }
+
+// .mat-column-created {
+//   max-width: 124px;
+// }
+
+.search-box {
+  font-size: small;
+}
+
+.align-end {
+  display: flex;
+  align-items: flex-end;
+}
+
+// override default mat-chip styling
+.mat-chip {
+  padding: 0 4px;
+  border-radius: 4px;
+  min-height: 21px;
+  color: #666;
+  font-weight: normal;
+  font-size: 0.9em;
+  cursor: inherit;
+}
+
+.mat-icon-button:hover {
+  background-color: #f0f0f0;
+}
+.mat-icon-button.action-button {
+  color: #666;
+}
+.mat-icon-button.action-button:hover {
+  color: inherit;
+}
+
+.select-column {
+  width: 40px;
+}
+.issue-number-column {
+  width: 100px;
+}
+.created-and-action-buttons-column {
+  width: 4*40px;
+}
