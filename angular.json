@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "indexer": {
+    "gmail-clone": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -39,7 +39,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/indexer",
+            "outputPath": "dist/gmail-clone",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -91,18 +91,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "indexer:build"
+            "browserTarget": "gmail-clone:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "indexer:build:production"
+              "browserTarget": "gmail-clone:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "indexer:build"
+            "browserTarget": "gmail-clone:build"
           }
         },
         "test": {
@@ -140,18 +140,18 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "indexer:serve"
+            "devServerTarget": "gmail-clone:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "indexer:serve:production"
+              "devServerTarget": "gmail-clone:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "indexer",
+  "defaultProject": "gmail-clone",
   "cli": {
     "analytics": false
   }

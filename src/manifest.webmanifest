@@ -1,6 +1,6 @@
 {
-  "name": "indexer",
-  "short_name": "indexer",
+  "name": "gmail-clone",
+  "short_name": "gmail-clone",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",
