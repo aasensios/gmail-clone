@@ -1,37 +1,14 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { merge, Observable, of as observableOf } from 'rxjs';
+import { merge, of as observableOf } from 'rxjs';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { Align, TableColumn } from 'simplemattable';
-import { Doc } from './doc.model';
+import { Doc } from '../doc/doc.model';
 import { DocsService } from './docs.service'
-
-export interface GithubApi {
-  items: GithubIssue[];
-  total_count: number;
-}
-
-export interface GithubIssue {
-  number: string;
-  state: string;
-  title: string;
-  created_at: string;
-}
-
-/** An example database that the data source uses to retrieve data for the table. */
-export class ExampleHttpDatabase {
-  constructor(private http: HttpClient) { }
-
-  getRepoIssues(sort: string, order: string, page: number, per_page: number): Observable<GithubApi> {
-    const href = 'https://api.github.com/search/issues';
-    const requestUrl = `${href}?q=repo:angular/components&sort=${sort}&order=${order}&page=${page + 1}&per_page=${per_page}`;
-    return this.http.get<GithubApi>(requestUrl);
-  }
-}
+import { GithubIssue } from './github-issue.model'
 
 @Component({
   selector: 'app-docs',
@@ -39,33 +16,30 @@ export class ExampleHttpDatabase {
   styleUrls: ['./docs.component.scss']
 })
 export class DocsComponent implements AfterViewInit {
-  displayedColumns: string[] = ['select', 'number', 'title', 'created'];
-  exampleDatabase: ExampleHttpDatabase | null;
+
+  @ViewChild('repobox') repobox: HTMLInputElement;
+  repo = 'angular/material'
   dataSource: MatTableDataSource<GithubIssue>;
+  displayedColumns: string[] = ['select', 'number', 'title', 'created'];
   resultsLength = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild('searchbox') searchbox: ElementRef;
   selection = new SelectionModel<GithubIssue>(true, []);
-  hovered = false
   states = [
-    // { name: 'inbox', icon: 'inbox' },
-    // { name: 'completed', icon: 'assignment_turned_in' },
-    // { name: 'all docs', icon: 'all_inbox' },
+    { name: 'all issues', icon: 'all_inbox' },
     { name: 'open', icon: 'pending_actions' },
     { name: 'closed', icon: 'assignment_turned_in' },
-    { name: 'all issues', icon: 'all_inbox' },
   ]
   actions = [
-    { name: 'archive', icon: 'archive' },
-    { name: 'delete', icon: 'delete' },
-    { name: 'mark as unread', icon: 'markunread' },
-    { name: 'snooze', icon: 'watch_later' },
+    { name: 'archive', icon: 'archive', method: this.mockAction },
+    { name: 'delete', icon: 'delete', method: this.mockAction },
+    { name: 'mark as unread', icon: 'markunread', method: this.mockAction },
+    { name: 'snooze', icon: 'watch_later', method: this.mockAction },
   ]
 
-  constructor(private http: HttpClient) { }
+  constructor(private service: DocsService) { }
 
   ngAfterViewInit() {
     this.fetchGithubIssues()
@@ -106,31 +80,27 @@ export class DocsComponent implements AfterViewInit {
   }
 
   handleMouseOver(row) {
-    const number = row.number;
     this.dataSource.data.map((data: any) => {
-      if (data.number === number) {
+      if (data.number === row.number) {
         data.hovered = true;
       }
     });
   }
 
   handleMouseLeave(row) {
-    const number = row.number;
     this.dataSource.data.map((data: any) => {
-      if (data.number === number) {
+      if (data.number === row.number) {
         data.hovered = false;
       }
     });
   }
 
-  clearSearch() {
+  clearInput(inputElement: HTMLInputElement) {
     this.dataSource.filter = ''
-    this.searchbox.nativeElement.value = ''
+    inputElement.value = ''
   }
 
   fetchGithubIssues() {
-    this.exampleDatabase = new ExampleHttpDatabase(this.http);
-
     // If the user changes the sort order, reset back to the first page.
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
@@ -139,7 +109,7 @@ export class DocsComponent implements AfterViewInit {
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          return this.exampleDatabase!.getRepoIssues(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+          return this.service.getRepoIssues(this.repo, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
         }),
         map(data => {
           // Flip flag to show that loading has finished.
@@ -158,7 +128,17 @@ export class DocsComponent implements AfterViewInit {
       ).subscribe(data => this.dataSource = new MatTableDataSource<GithubIssue>(data));
   }
 
+  openInNew(url) {
+    window.open(url);
+  }
+
+  mockAction(row, action) {
+    console.log(`issue ${row.number} ${action.name} clicked!`)
+  }
+
   // ***********************************************************************************
+
+  // SIMPLEMATTABLE APPROACH
 
   // data: any[]
   // columns: any[]

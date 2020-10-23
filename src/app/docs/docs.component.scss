@@ -1,3 +1,11 @@
+.mat-toolbar {
+  background: transparent;
+}
+
+.mat-form-field {
+  font-size: initial;
+}
+
 .full-width-table {
   width: 100%;
 }
@@ -64,10 +72,6 @@ table {
 //   max-width: 124px;
 // }
 
-.search-box {
-  font-size: small;
-}
-
 .align-end {
   display: flex;
   align-items: flex-end;
@@ -94,12 +98,17 @@ table {
   color: inherit;
 }
 
-.select-column {
+.checkbox-column {
   width: 40px;
 }
 .issue-number-column {
   width: 100px;
 }
-.created-and-action-buttons-column {
-  width: 4*40px;
+.last-column {
+  // width: 5*40px;
+  width: 300px;
+}
+
+.actions {
+  z-index: 9;
 }
