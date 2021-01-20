@@ -18,10 +18,21 @@
   height: calc(100% - 65px);
 }
 
-h1,
-.mat-table:hover {
-  // background: whitesmoke;
+h1 {
   cursor: pointer;
+  color: gray;
+}
+
+.logo {
+  font-size: 2rem;
+}
+
+.mat-table:hover {
+  cursor: pointer;
+}
+
+.touched {
+  background: whitesmoke;
 }
 
 [mat-row].remove-background {
@@ -114,10 +125,44 @@ table {
 }
 
 .icon-display {
-  transform: scale(.6);
+  transform: scale(0.6);
 }
 
 .gmail-action {
   background-color: transparent;
   border: solid #666 1px;
+  border-radius: 0.2em;
+}
+
+.fullheight {
+  height: 100%;
+}
+
+.scroll {
+  overflow-y: scroll;
+}
+
+.plaintext {
+  font-family: "Roboto Mono", monospace;
+  font-size: 0.8rem;
+  padding: 0 1.6rem;
+}
+
+.wrap {
+  overflow-x: auto;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+
+.content {
+  // 56px from mat-paginator
+  // 1px from mat-divider
+  height: calc(100% - 56px - 1px);
+}
+
+.mat-drawer-container {
+  background-color: white;
 }
