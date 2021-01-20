@@ -12,13 +12,11 @@ import { environment } from '../environments/environment'
 import { MaterialModule } from './material/material.module'
 import { FlexLayoutModule } from '@angular/flex-layout'
 import { SimplemattableModule } from 'simplemattable'
-import { DocsComponent } from './docs/docs.component'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 
 @NgModule({
   declarations: [
     AppComponent,
-    DocsComponent,
   ],
   imports: [
     BrowserModule,
