@@ -20,17 +20,18 @@ export class AppComponent implements AfterViewInit {
   @ViewChild('repobox') repobox: HTMLInputElement
   repo = 'angular/material'
   dataSource: MatTableDataSource<GithubIssue>
-  displayedColumns: string[] = ['select', 'number', 'title', 'created']
-  resultsLength = 0;
+  displayedColumns: string[] = ['select', 'title', 'created']
+  resultsLength = 0
   isLoadingResults = true
   isRateLimitReached = false
   @ViewChild(MatPaginator) paginator: MatPaginator
   @ViewChild(MatSort) sort: MatSort
-  selection = new SelectionModel<GithubIssue>(true, []);
+  selection = new SelectionModel<GithubIssue>(true, [])
   states = [
-    { name: 'all issues', icon: 'all_inbox' },
-    { name: 'open', icon: 'pending_actions' },
-    { name: 'closed', icon: 'assignment_turned_in' },
+    { name: 'All issues', icon: 'all_inbox' },
+    { name: 'Open issues', icon: 'pending_actions' },
+    { name: 'Closed issues', icon: 'assignment_turned_in' },
+    { name: 'Starred issues', icon: 'star_outline' },
   ]
   actions = [
     { name: 'archive', icon: 'archive', method: this.actionToBeImplemented },
@@ -43,7 +44,6 @@ export class AppComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.fetchGithubIssues()
-    this.addHoveredProperty()
   }
 
   applyFilter(event: Event) {
@@ -71,28 +71,6 @@ export class AppComponent implements AfterViewInit {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.number}`
-  }
-
-  addHoveredProperty() {
-    this.dataSource?.data.map((data: any) => {
-      data.hovered = false
-    })
-  }
-
-  handleMouseOver(row) {
-    this.dataSource.data.map((data: any) => {
-      if (data.number === row.number) {
-        data.hovered = true
-      }
-    })
-  }
-
-  handleMouseLeave(row) {
-    this.dataSource.data.map((data: any) => {
-      if (data.number === row.number) {
-        data.hovered = false
-      }
-    })
   }
 
   clearInput(inputElement: HTMLInputElement) {
@@ -132,6 +110,10 @@ export class AppComponent implements AfterViewInit {
 
   actionToBeImplemented(row, action) {
     console.log(`issue ${row.number} ${action.name} clicked!`)
+  }
+
+  goToThisGithubRepo() {
+    window.open("https://github.com/aasensios/gmail-clone")
   }
 
 }
