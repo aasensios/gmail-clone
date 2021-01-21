@@ -11,7 +11,6 @@ import { FormsModule } from '@angular/forms'
 import { environment } from '../environments/environment'
 import { MaterialModule } from './material/material.module'
 import { FlexLayoutModule } from '@angular/flex-layout'
-import { SimplemattableModule } from 'simplemattable'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 
 @NgModule({
@@ -27,7 +26,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     MaterialModule,
     FlexLayoutModule,
-    SimplemattableModule,
     FontAwesomeModule,
   ],
   providers: [],
