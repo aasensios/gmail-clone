@@ -1,3 +1,7 @@
+.spacer {
+  flex: 1 1 auto;
+}
+
 .gray {
   color: #666666;
 }
@@ -71,7 +75,6 @@
 }
 
 .available-height {
-  // 56px from mat-paginator
   // 1px from mat-divider
-  height: calc(100% - 56px - 1px);
+  height: calc(100% - 1px);
 }

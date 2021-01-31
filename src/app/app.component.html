@@ -8,7 +8,8 @@
     GitHub Issues
   </h1>
   <mat-form-field appearance="outline" floatLabel="never" class="search-bar">
-    <button matPrefix mat-icon-button aria-label="Search" matTooltip="Search" (click)="fetchGithubIssues()">
+    <button matPrefix mat-icon-button aria-label="Search" matTooltip="Search"
+      (click)="fetchGithubIssues()">
       <mat-icon>search</mat-icon>
     </button>
     <input #repobox type="text" matInput placeholder="Search issues" matTooltip="user/repository" [(ngModel)]="repo"
@@ -18,29 +19,18 @@
       <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>
-
-  <!-- TODO: place correctly these action buttons -->
-  <div>
-    <button mat-icon-button>
-      <mat-icon>refresh</mat-icon>
-    </button>
-    <button mat-icon-button>
-      <mat-icon>more_vert</mat-icon>
-    </button>
-  </div>
-
+  <span class="spacer"></span>
   <button mat-icon-button matTooltip="This is a side project that recreates the Gmail webpage appearance. Just for fun :)">
     <mat-icon class="material-icons-outlined">settings</mat-icon>
   </button>
   <fa-icon [icon]="faGithub" class="logo" (click)="goToThisGithubRepo()"></fa-icon>
-
 </mat-toolbar>
 <mat-divider></mat-divider>
 <mat-drawer-container autosize>
   <mat-drawer #drawer mode="side" opened="true">
     <button mat-raised-button class="add-issue-button">
       <mat-icon>add</mat-icon>
-      Issue
+      Compose
     </button>
     <mat-selection-list #labelsList [multiple]="false" disableRipple>
       <mat-list-option *ngFor="let state of states" [value]="state.name" [matTooltip]="state.name"
@@ -50,8 +40,6 @@
       </mat-list-option>
     </mat-selection-list>
   </mat-drawer>
-  <mat-paginator [length]="resultsLength" pageSize="10" hidePageSize></mat-paginator>
-  <mat-divider></mat-divider>
 
   <div class="loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
     <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
@@ -60,13 +48,29 @@
     </div>
   </div>
 
-  <article fxLayout class="available-height">
-    <section fxFlex="50%" [ngStyle]="{'opacity': isLoadingResults ? '0.5' : '1'}">
+  <div fxLayout="column" class="available-height" [ngStyle]="{'opacity': isLoadingResults ? '0.5' : '1'}">
+    <section fxLayout fxLayoutAlign="space-between center">
+      <div>
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                      [aria-label]="checkboxLabel()">
+        </mat-checkbox>
+        <button mat-icon-button style="margin-left: 1rem;">
+          <mat-icon>refresh</mat-icon>
+        </button>
+        <button mat-icon-button>
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      </div>
+      <mat-paginator [length]="resultsLength" pageSize="10" hidePageSize></mat-paginator>
+    </section>
+    <section>
       <table mat-table [dataSource]="dataSource" matSort matSortDisableClear matSortActive="created" matSortDirection="desc">
 
-        <!-- Checkbox Column -->
+        <!-- Checkbox column and more buttons -->
         <ng-container matColumnDef="select">
-          <th mat-header-cell *matHeaderCellDef>
+          <th mat-header-cell *matHeaderCellDef style="display: none;">
             <mat-checkbox (change)="$event ? masterToggle() : null"
                           [checked]="selection.hasValue() && isAllSelected()"
                           [indeterminate]="selection.hasValue() && !isAllSelected()"
@@ -138,9 +142,9 @@
         </tr>
       </table>
     </section>
-    <mat-divider vertical="true"></mat-divider>
-    <section fxFlex="50%" class="fullheight scroll">
+    <!-- <mat-divider vertical="true"></mat-divider>
+    <section class="fullheight scroll">
       <pre *ngIf="dataSource?.data" class="plaintext wrap">{{ dataSource?.data | json }}</pre>
-    </section>
-  </article>
+    </section> -->
+  </div>
 </mat-drawer-container>
